@@ -31,7 +31,7 @@ end
 NL = 10;
 %L1L2bounds; %Getting the bounds of L1 and L2 for theoretical convergence factor<1
 LL2 = linspace(0,70,NL);
-LL1 = LL2*0 + 10;
+LL1 = LL2*0 + 0;
 counter{NL} = 0; %Nl = #L1 and L2 gridpoints
 for Lindex1 = 1:NL
         counter{Lindex1} = zeros(nT-1,1);
@@ -42,8 +42,14 @@ for Lindex1 = 1:NL
 end
 end
 
+subplot(121)
 plot(LL2,countermeanL1,'linewidth',2)
 legend('$k=1$','$1+c^2$','$1+\sqrt(|c|)$','$(1-c)^2$', '$\sqrt{|c|}$','Interpreter','latex');
 xlabel("$L_1$",'interpreter', 'latex', 'fontsize',20);ylabel("mean iterations/timestep",'interpreter', 'latex', 'fontsize',20);
+subplot(122)
+plot(LL2,countermeanL2,'linewidth',2)
+legend('$k=1$','$1+c^2$','$1+\sqrt(|c|)$','$(1-c)^2$', '$\sqrt{|c|}$','Interpreter','latex');
+xlabel("$L_2$",'interpreter', 'latex', 'fontsize',20);ylabel("mean iterations/timestep",'interpreter', 'latex', 'fontsize',20);
+sgtitle("Mean iterations per timestep with $L_1$ and $L_2$ variable",'interpreter','latex','fontsize',20)
 %Natuurkundig oplossing plotten (vooral random permeability)
 %%%% contour functie maken van combinaties van L1 en L2
