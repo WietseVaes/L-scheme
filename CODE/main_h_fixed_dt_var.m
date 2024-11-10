@@ -4,14 +4,19 @@
 
 clear all
 
+K_types = {'constant','simple','bad Lipschitz','bad minimum', 'bad all'};
+
+
 Deltats = 10 .^ (-6:-2);
 counter{length(Deltats)} = 0;
-for i1 = 1:length(Deltats)
-    clearvars -except  Deltats countermean i1 counter papprox capprox
-    Lindex1 = i1;
+for i80 = 1:length(K_types)
+    perm_type = K_types{i80};
+for i25 = 1:length(Deltats)
+    clearvars -except  Deltats countermean i1 counter papprox capprox K_types perm_type
+    Lindex1 = 1;
     Lindex2 = 1;
     Mesh %Make Mesh
-    Deltat = Deltats(i1);
+    Deltat = Deltats(i25);
     t = 0:Deltat:Tmax;
     nT = length(t);
     
@@ -22,23 +27,13 @@ for i1 = 1:length(Deltats)
     L1 = 70;
     L2 = 0.0014;
     
-    counter{i1} = zeros(nT-1,1);
+    counter{i25} = zeros(nT-1,1);
     
     Comp %Compute p and c
 
-    papprox{i1} = p;
-    capprox{i1} = c;
-    countermean(i1) = mean(counter{i1});
+    papprox{i25,i80} = p;
+    capprox{i25,i80} = c;
+    countermean(i25,i80) = mean(counter{i80});
+end
 end
 save("bad all")
-
-for i1 = 1:5
-    countermean(i1) = mean(counter{i1});
-end
-
-
-countermean_nice_permeability = countermean
-counter_nice_permeability = counter
-papprox_nice_permeability = papprox
-capprox_nice_permeability = capprox
-clear capprox papprox 

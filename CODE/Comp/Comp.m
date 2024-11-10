@@ -17,7 +17,7 @@ for j = 2 : nT
     % cold = rand(size(c,1),1); c(:,j) = rand(size(c,1),1); %random startpoint
     % pold = rand(size(p,1),1); p(:,j) = rand(size(p,1),1); %random startpoint
 
-    while ((L2norm(c(:,j)-cold,elmat,x,y,"none") + L2norm(p(:,j)-pold,elmat,x,y,"grad")>= TOL * h_spacing) || counter{Lindex1}(j-1)==0 ) && counter{Lindex1}(j-1) <= maxcounter%in functie van Delta x (stapgrootte) zetten. (gescaald) 
+    while ((L2norm(c(:,j)-cold,elmat,x,y,"none") + L2norm(p(:,j)-pold,elmat,x,y,"grad")>= TOL ) || counter{Lindex1}(j-1)==0 ) && counter{Lindex1}(j-1) <= maxcounter%in functie van Delta x (stapgrootte) zetten. (gescaald) 
     %while ((L2norm(c(:,j)-cold,elmat,x,y,"none") + L2norm(p(:,j)-pold,elmat,x,y,"grad")>= TOL * h_spacing*sqrt(Deltat)) || counter{Lindex1,Lindex2}(j-1)==0 ) && counter{Lindex1,Lindex2}(j-1) <= maxcounter%in functie van Delta x (stapgrootte) zetten. (gescaald) 
         % if counter{Lindex1,Lindex2}(j-1)>=mincounter(j-1) %Checks if these L1 and L2 are doing worse than the ones of minimal iterations
         %     TF = 1;

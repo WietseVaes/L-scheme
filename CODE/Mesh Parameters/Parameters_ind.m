@@ -13,57 +13,52 @@ Dyycsol = -sin(t).*(x-1).*cos(y)/2;
 
 c(:,1) = csol(:,1);
 
-% Constant
-%{
-permeability = (x+y+t+csol).^0;
-Dxpermeability = (x+y+t+csol).^0-1;
-Dypermeability = (x+y+t+csol).^0-1;
-Lk = 0;
-%}
+switch  perm_type
+    case 'constant'
 
-% Concentration dependent m_k = 1; L_k = 2
-%
-permeability = (x+y+t).^0 + csol.^2;
-Dxpermeability = (x+y+t).^0-1 + csol.*Dxcsol;
-Dypermeability = (x+y+t).^0-1 + csol.*Dycsol;
-Lk = 2;
-%}
+        permeability = (x+y+t+csol).^0;
+        Dxpermeability = (x+y+t+csol).^0-1;
+        Dypermeability = (x+y+t+csol).^0-1;
+        Lk = 0;
+    case  'simple'
 
-% Concentration dependent m_k = 1; L_k = inf
-%{
-epsi = 1e-2;
-permeability = (x+y+t).^0 + sqrt(epsi^2+abs(csol));
-Dxpermeability = (x+y+t).^0-1 + sign(csol)./(2.*sqrt(epsi^2+abs(csol))).*Dxcsol;
-Dypermeability = (x+y+t).^0-1 + sign(csol)./(2.*sqrt(epsi^2+abs(csol))).*Dycsol;
-Lk = 1/(2*epsi);
-%}
+        permeability = (x+y+t).^0 + csol.^2;
+        Dxpermeability = (x+y+t).^0-1 + csol.*Dxcsol;
+        Dypermeability = (x+y+t).^0-1 + csol.*Dycsol;
+        Lk = 2;
+    case 'bad Lipschitz'
 
-% Concentration dependent m_k = 0; L_k = 2
-%{
-epsi = 1e-4;
-permeability = epsi + (x+y+t).^0 + (1-csol).^2;
-Dxpermeability = (x+y+t).^0-1 + 2*(1-csol).*Dxcsol;
-Dypermeability = (x+y+t).^0-1 + 2*(1-csol).*Dycsol;
-Lk = 2;
-%}
+        epsi = 1e-2;
+        permeability = (x+y+t).^0 + sqrt(epsi^2+abs(csol));
+        Dxpermeability = (x+y+t).^0-1 + sign(csol)./(2.*sqrt(epsi^2+abs(csol))).*Dxcsol;
+        Dypermeability = (x+y+t).^0-1 + sign(csol)./(2.*sqrt(epsi^2+abs(csol))).*Dycsol;
+        Lk = 1/(2*epsi);
 
-%Concentration dependent m_k = 0; L_k = inf
-%{
-epsi = 1e-2;
-permeability = (x+y+t).^0 - 1 + sqrt(epsi^2+abs(csol));
-Dxpermeability = (x+y+t).^0-1 + sign(csol)./(2.*sqrt(epsi^2+abs(csol))).*Dxcsol;
-Dypermeability = (x+y+t).^0-1 + sign(csol)./(2.*sqrt(epsi^2+abs(csol))).*Dycsol;
-Lk = 1/(2*epsi);
-%}
+    case 'bad minimum'
 
-%Concentration dependent m_k = 0; L_k = inf + spatial dependence
-%{
-epsi = 1e-2;
-permeability = (x+y+t).^0 - 1 + sqrt(epsi^2+abs(csol));
-Dxpermeability = (x+y+t).^0-1 + csol./(2*abs(csol).*sqrt(epsi^2+abs(csol))).*Dxcsol;
-Dypermeability = (x+y+t).^0-1 + csol./(2*abs(csol).*sqrt(epsi^2+abs(csol))).*Dycsol;
-Lk = 1/(2*epsi);
-%}
+        epsi = 1e-4;
+        permeability = epsi + (x+y+t).^0 - 1 + (1-csol).^2;
+        Dxpermeability = (x+y+t).^0-1 + 2*(1-csol).*Dxcsol;
+        Dypermeability = (x+y+t).^0-1 + 2*(1-csol).*Dycsol;
+        Lk = 2;
+
+    case 'bad all'
+
+
+        epsi = 1e-2;
+        permeability = (x+y+t).^0 - 1 + sqrt(epsi^2+abs(csol));
+        Dxpermeability = (x+y+t).^0-1 + sign(csol)./(2.*sqrt(epsi^2+abs(csol))).*Dxcsol;
+        Dypermeability = (x+y+t).^0-1 + sign(csol)./(2.*sqrt(epsi^2+abs(csol))).*Dycsol;
+        Lk = 1/(2*epsi);
+
+
+    case 'bad all spatial'
+        epsi = 1e-2;
+        permeability = (x+y+t).^0 - 1 + sqrt(epsi^2+abs(csol));
+        Dxpermeability = (x+y+t).^0-1 + csol./(2*abs(csol).*sqrt(epsi^2+abs(csol))).*Dxcsol;
+        Dypermeability = (x+y+t).^0-1 + csol./(2*abs(csol).*sqrt(epsi^2+abs(csol))).*Dycsol;
+        Lk = 1/(2*epsi);
+end
 
 
 D = (x+y+t).^0;
@@ -145,37 +140,31 @@ end
 %% Putting in the used diffusion coefficient and permeability (without exact solution of c)
 D = (x+y+t).^0;
 
+switch  perm_type
+    case 'constant'
 
-% Constant
-%{
-permeability(:,1) = (x+y+t(1)+c(:,1)).^0;
-%}
+        permeability(:,1) = (x+y+t(1)+c(:,1)).^0;
 
-% Concentration dependent m_k = 1; L_k = 2
-%
-permeability(:,1) = (x+y+t(1)).^0 + c(:,1).^2;
-%}
+    case  'simple'
 
-% Concentration dependent m_k = 1; L_k = inf
-%{
-epsi = 1e-2;
-permeability(:,1) = (x+y+t(1)).^0 + sqrt(epsi^2+abs(c(:,1)));
-%}
+        permeability(:,1) = (x+y+t(1)).^0 + c(:,1).^2;
 
-% Concentration dependent m_k = 0; L_k = 2
-%{
-epsi = 1e-4;
-permeability(:,1) = epsi + (x+y+t(1)).^0 + (1-c(:,1)).^2;
-%}
+    case 'bad Lipschitz'
+        epsi = 1e-2;
+        permeability(:,1) = (x+y+t(1)).^0  + sqrt(epsi^2+abs(c(:,1)));
 
-%Concentration dependent m_k = 0; L_k = inf
-%{
-epsi = 1e-2;
-permeability(:,1) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,1)));
-%}
 
-%Concentration dependent m_k = 0; L_k = inf + spatial dependence
-%{
-epsi = 1e-2
-permeability(:,1) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,1)));
-%}
+    case 'bad minimum'
+        epsi = 1e-4;
+        permeability(:,1) = epsi + (x+y+t(1)).^0 - 1 + (1-c(:,1)).^2;
+
+
+    case 'bad all'
+        epsi = 1e-2;
+        permeability(:,1) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,1)));
+
+
+    case 'bad all spatial'
+        epsi = 1e-2;
+        permeability(:,1) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,1)));
+end

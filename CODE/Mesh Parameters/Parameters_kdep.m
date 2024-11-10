@@ -2,78 +2,43 @@
 
 %if counter{Lindex1,Lindex2}(j-1)~=0
 if counter{Lindex1}(j-1)~=0
-    % Constant
-    %{
-    permeability(:,j) = (x+y+t(1)+c(:,j)).^0;
-    %}
-
-    % Concentration dependent m_k = 1; L_k = 2
-    %
-    permeability(:,j) = (x+y+t(1)).^0 + c(:,j).^2;
-    %}
-
-    % Concentration dependent m_k = 1; L_k = inf
-    %{
-    epsi = 1e-2;
-    permeability(:,j) = (x+y+t(1)).^0 + sqrt(epsi^2+abs(c(:,j)));
-    %}
-
-    % Concentration dependent m_k = 0; L_k = 2
-    %{
-    epsi = 1e-4;
-    permeability(:,j) = epsi + (x+y+t(1)).^0 + (1-c(:,j)).^2;
-    %}
-
-    %Concentration dependent m_k = 0; L_k = inf
-    %{
-    epsi = 1e-2;
-    permeability(:,j) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,j)));
-    %}
-
-    %Concentration dependent m_k = 0; L_k = inf + spatial dependence
-    %{
-    epsi = 1e-2;
-    permeability(:,j) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,j)));
-    %}
-
-
-    %permeability(:,j) = sin((x+y)).*(1-c(:,j))/2+1;
+    switch  perm_type
+        case 'constant'
+            permeability(:,j) = (x+y+t(1)+c(:,j)).^0;
+        case  'simple'
+            permeability(:,j) = (x+y+t(1)).^0 + c(:,j).^2;
+        case 'bad Lipschitz'
+            epsi = 1e-2;
+            permeability(:,j) = (x+y+t(1)).^0 + sqrt(epsi^2+abs(c(:,j)));
+        case 'bad minimum'
+            epsi = 1e-4;
+            permeability(:,j) = epsi + (x+y+t(1)).^0 - 1 + (1-c(:,j)).^2;
+        case 'bad all'
+            epsi = 1e-2;
+            permeability(:,j) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,j)));
+        case 'bad all spatial'
+            epsi = 1e-2;
+            permeability(:,j) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,j)));
+    end
 else
 
-    % Constant
-    %{
-    permeability(:,j) = (x+y+t(1)+c(:,j-1)).^0;
-    %}
+    switch  perm_type
+        case 'constant'
+            permeability(:,j) = (x+y+t(1)+c(:,j-1)).^0;
+        case  'simple'
+            permeability(:,j) = (x+y+t(1)).^0 + c(:,j-1).^2;
+        case 'bad Lipschitz'
+            epsi = 1e-2;
+            permeability(:,j) = (x+y+t(1)).^0 + sqrt(epsi^2+abs(c(:,j-1)));
+        case 'bad minimum'
+            epsi = 1e-4;
+            permeability(:,j) = epsi + (x+y+t(1)).^0 - 1 + (1-c(:,j-1)).^2;
+        case 'bad all'
+            epsi = 1e-2;
+            permeability(:,j) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,j-1)));
+        case 'bad all spatial'
+            epsi = 1e-2;
+            permeability(:,j) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,j-1)));
+    end
 
-    % Concentration dependent m_k = 1; L_k = 2
-    %
-    permeability(:,j) = (x+y+t(1)).^0 + c(:,j-1).^2;
-    %}
-
-    % Concentration dependent m_k = 1; L_k = inf
-    %{
-    epsi = 1e-2;
-    permeability(:,j) = (x+y+t(1)).^0 + sqrt(epsi^2+abs(c(:,j-1)));
-    %}
-
-    % Concentration dependent m_k = 0; L_k = 2
-    %{
-    epsi = 1e-4;
-    permeability(:,j) = epsi + (x+y+t(1)).^0 + (1-c(:,j-1)).^2;
-    %}
-
-    %Concentration dependent m_k = 0; L_k = inf
-    %{
-    epsi = 1e-2;
-    permeability(:,j) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,j-1)));
-    %}
-
-    %Concentration dependent m_k = 0; L_k = inf + spatial dependence
-    %{
-    epsi = 1e-2;
-    permeability(:,j) = (x+y+t(1)).^0 - 1 + sqrt(epsi^2+abs(c(:,j-1)));
-    %}
-
-
-    %permeability(:,j) = sin(x+y).*(1-c(:,j-1))/2+1;
 end
