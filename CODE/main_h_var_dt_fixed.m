@@ -1,14 +1,13 @@
-%clearvars -except  Respvec Rescvec h Deltat indexerr Countervec L1 L2 alpha
-%%%% Programma duurt lang, zet een breakpoint in comp line 52 om een
-%%%% resultaat te krijgen en run daarna Post
-
 clear all
 
-hs = 2 .^ (-1:-1:-4);
+K_types = {'constant','simple','bad Lipschitz','bad minimum', 'bad all'};
 
-for i1 = 1:length(hs)
-    clearvars -except  hs countermean i1
-    h_spacing = hs(i1);
+hs = 2 .^ (-1:-1:-4);
+for i80 = 1:length(K_types)
+    perm_type = K_types{i80};
+for i15 = 1:length(hs)
+    clearvars -except  hs countermean i1 K_types perm_type
+    h_spacing = hs(i15);
     Mesh %Make Mesh
     
     Parameters_ind %Getting time independant parameters
@@ -24,7 +23,9 @@ for i1 = 1:length(hs)
     counter{1} = zeros(nT-1,1);
     
     Comp %Compute p and c
-    countermean(i1) = mean(counter{1});
+    countermean(i15,i80) = mean(counter{1});
+end
+    disp([K_types{i80}, 'is done.'])
 end
 
-save('Nice k h')
+

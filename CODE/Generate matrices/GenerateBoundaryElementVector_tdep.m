@@ -22,31 +22,31 @@ bbcelem = zeros(topologybnd,1);
 
 if all(xc <= -1+eps)
     if ~all(cDirichletBD(x,y,elmatbnd(i,:)))
-        bbcelem = dist/factorial(topologybnd)*Gc1;
+        bbcelem = dist/2*Gc1;
     end
     if ~all(pDirichletBD(x,y,elmatbnd(i,:)))
-        bbelem = dist/factorial(topologybnd)*Gs1;
+        bbelem = dist/2*Gs1;
     end
 elseif all(xc>= 1-eps)
     if ~all(cDirichletBD(x,y,elmatbnd(i,:)))
-        bbcelem = dist/factorial(topologybnd)*Gc2;
+        bbcelem = dist/2*Gc2;
     end
     if ~all(pDirichletBD(x,y,elmatbnd(i,:)))
-        bbelem = dist/factorial(topologybnd)*Gs2;
+        bbelem = dist/2*Gs2;
     end
 end
 if all(yc<= -1+eps)
     if ~all(cDirichletBD(x,y,elmatbnd(i,:)))
-        bbcelem = dist/factorial(topologybnd)*Gc3;
+        bbcelem = dist/2*Gc3;
     end
     if ~all(pDirichletBD(x,y,elmatbnd(i,:)))
-        bbelem = dist/factorial(topologybnd)*Gs3;
+        bbelem = dist/2*Gs3;
     end
 elseif all(yc>= 1-eps)
     if ~all(cDirichletBD(x,y,elmatbnd(i,:)))
-        bbcelem = dist/factorial(topologybnd)*Gc4;
+        bbcelem = dist/2*Gc4;
     end
     if ~all(pDirichletBD(x,y,elmatbnd(i,:)))
-        bbelem = dist/factorial(topologybnd)*Gs4;
+        bbelem = dist/2*Gs4;
     end
 end

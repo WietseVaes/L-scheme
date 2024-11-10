@@ -1,14 +1,14 @@
 %% Time discretisation
 Tmax = 0.3;
 if ~exist('Deltat')
-    Deltat = 1e-4;
+    Deltat = 1e-2;
 end
 t = 0:Deltat:Tmax;
 nT = length(t);
 
 %% Spatial discretization 
 if ~exist('h_spacing')
-    h_spacing = 0.25;
+    h_spacing = 0.1;
 end
 TOL = 1e-5;
 [XX,YY] = meshgrid(-1:h_spacing:1,-1:h_spacing:1);

@@ -1,12 +1,12 @@
 %Load new matrices
 
-S 		= sparse(n,n); % stiffness matrix
+S 		= zeros(n,n); % stiffness matrix
 
-Mc 		= sparse(n,n);
+Mc 		= zeros(n,n);
 
-SD		= sparse(n,n);
+SD		= zeros(n,n);
 
-S1     = sparse(n,n);
+S1     = zeros(n,n);
 
 for i = 1:length(elmat(:,1)) % for all elements
 

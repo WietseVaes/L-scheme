@@ -26,4 +26,4 @@ for index1 = 1:topology
         Velem(index1,index2) = permeability(elmat(i,index2),j)*VV(index1);
     end
 end
-Velem = Velem/viscosity*Delta/factorial(topology);
+Velem = Velem/viscosity*Delta/6;
