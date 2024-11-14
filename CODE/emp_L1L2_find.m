@@ -4,7 +4,7 @@ clear all
 K_types = {'constant','simple','bad Lipschitz','bad minimum', 'bad all'};
 
 perm_type = 'constant';
-NL = 10;
+NL = 100;
 countermeanL2 = zeros(NL,length(K_types));
 countermeanL1 = zeros(NL,length(K_types));
 for i8 = 1:length(K_types)
@@ -28,7 +28,6 @@ end
 
 %Post
 
-NL = 10;
 %L1L2bounds; %Getting the bounds of L1 and L2 for theoretical convergence factor<1
 LL2 = linspace(0,70,NL);
 LL1 = LL2*0 + 0;
@@ -41,15 +40,16 @@ for Lindex1 = 1:NL
         countermeanL2(Lindex1,i8) = mean(counter{Lindex1});
 end
 end
+save("L1L2emp_res")
+% subplot(121)
+% plot(LL2,countermeanL1,'linewidth',2)
+% legend('$k=1$','$1+c^2$','$1+\sqrt(|c|)$','$(1-c)^2$', '$\sqrt{|c|}$','Interpreter','latex');
+% xlabel("$L_1$",'interpreter', 'latex', 'fontsize',20);ylabel("mean iterations/timestep",'interpreter', 'latex', 'fontsize',20);
+% subplot(122)
+% plot(LL2,countermeanL2,'linewidth',2)
+% legend('$k=1$','$1+c^2$','$1+\sqrt(|c|)$','$(1-c)^2$', '$\sqrt{|c|}$','Interpreter','latex');
+% xlabel("$L_2$",'interpreter', 'latex', 'fontsize',20);ylabel("mean iterations/timestep",'interpreter', 'latex', 'fontsize',20);
+% sgtitle("Mean iterations per timestep with $L_1$ and $L_2$ variable",'interpreter','latex','fontsize',20)
 
-subplot(121)
-plot(LL2,countermeanL1,'linewidth',2)
-legend('$k=1$','$1+c^2$','$1+\sqrt(|c|)$','$(1-c)^2$', '$\sqrt{|c|}$','Interpreter','latex');
-xlabel("$L_1$",'interpreter', 'latex', 'fontsize',20);ylabel("mean iterations/timestep",'interpreter', 'latex', 'fontsize',20);
-subplot(122)
-plot(LL2,countermeanL2,'linewidth',2)
-legend('$k=1$','$1+c^2$','$1+\sqrt(|c|)$','$(1-c)^2$', '$\sqrt{|c|}$','Interpreter','latex');
-xlabel("$L_2$",'interpreter', 'latex', 'fontsize',20);ylabel("mean iterations/timestep",'interpreter', 'latex', 'fontsize',20);
-sgtitle("Mean iterations per timestep with $L_1$ and $L_2$ variable",'interpreter','latex','fontsize',20)
 %Natuurkundig oplossing plotten (vooral random permeability)
 %%%% contour functie maken van combinaties van L1 en L2
