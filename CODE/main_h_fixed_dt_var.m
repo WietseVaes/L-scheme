@@ -7,25 +7,23 @@ clear all
 K_types = {'constant','simple','bad Lipschitz','bad minimum', 'bad all'};
 
 
-Deltats = 10 .^ (-6:-2);
+Deltats = 10 .^ (-5:-2);
 counter{length(Deltats)} = 0;
 for i80 = 1:length(K_types)
     perm_type = K_types{i80};
 for i25 = 1:length(Deltats)
-    clearvars -except  Deltats countermean i1 counter papprox capprox K_types perm_type
+    clearvars -except  Deltats countermean i25 counter papprox capprox K_types perm_type i80 conv_rate_mean conv_rate_full
     Lindex1 = 1;
     Lindex2 = 1;
-    Mesh %Make Mesh
     Deltat = Deltats(i25);
-    t = 0:Deltat:Tmax;
-    nT = length(t);
+    Mesh %Make Mesh
     
     Parameters_ind %Getting time independant parameters
     mincounter = 15*ones(nT-1,1); %Stating minimal counter of iterations
     NL = 1;
     %L1L2bounds; %Getting the bounds of L1 and L2 for theoretical convergence factor<1
     L1 = 70;
-    L2 = 0.0014;
+    L2 = 1;
     
     counter{i25} = zeros(nT-1,1);
     
@@ -34,6 +32,9 @@ for i25 = 1:length(Deltats)
     papprox{i25,i80} = p;
     capprox{i25,i80} = c;
     countermean(i25,i80) = mean(counter{i80});
+    conv_rate_full{i25,i80} = conv_rate;
+    conv_rate_mean{i25,i80} = mean(conv_rate);
 end
+disp([K_types{i80}, ' is done.'])
 end
-save("bad all")
+save("dt var results all")

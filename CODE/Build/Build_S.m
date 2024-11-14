@@ -1,6 +1,6 @@
 clear S Selem
 
-S 		= zeros(n,n); 
+S 		= sparse(n,n); 
 
 for i = 1:length(elmat(:,1)) % for all internal elements
 

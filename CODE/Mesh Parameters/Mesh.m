@@ -10,7 +10,7 @@ nT = length(t);
 if ~exist('h_spacing')
     h_spacing = 0.1;
 end
-TOL = 1e-5;
+TOL = 1e-8;
 [XX,YY] = meshgrid(-1:h_spacing:1,-1:h_spacing:1);
 x = reshape(XX,size(XX,1)^2,1);y = reshape(YY,size(YY,1)^2,1);
 elmat = delaunay(x,y);

@@ -5,6 +5,7 @@ Comp_p %Computing pressure
 %True/False statement for if current iterations exceeds minimal amount of iterations
 TF = 0;
 maxcounter = 300;
+conv_rate = zeros(nT-1,1);
 for j = 2 : nT
     if TF %Check if these L1 and L2 are doing worse than the ones of minimal iterations
         break
@@ -16,15 +17,12 @@ for j = 2 : nT
 
     % cold = rand(size(c,1),1); c(:,j) = rand(size(c,1),1); %random startpoint
     % pold = rand(size(p,1),1); p(:,j) = rand(size(p,1),1); %random startpoint
+    conv_rate_temp = 0 ;
+    it_err = L2norm(c(:,j)-cold,elmat,x,y,"none") + L2norm(p(:,j)-pold,elmat,x,y,"grad");
+    while (it_err >= TOL  || counter{Lindex1}(j-1)==0 ) && counter{Lindex1}(j-1) <= maxcounter%in functie van Delta x (stapgrootte) zetten. (gescaald) 
+        
+        it_err_old = it_err;
 
-    while ((L2norm(c(:,j)-cold,elmat,x,y,"none") + L2norm(p(:,j)-pold,elmat,x,y,"grad")>= TOL ) || counter{Lindex1}(j-1)==0 ) && counter{Lindex1}(j-1) <= maxcounter%in functie van Delta x (stapgrootte) zetten. (gescaald) 
-    %while ((L2norm(c(:,j)-cold,elmat,x,y,"none") + L2norm(p(:,j)-pold,elmat,x,y,"grad")>= TOL * h_spacing*sqrt(Deltat)) || counter{Lindex1,Lindex2}(j-1)==0 ) && counter{Lindex1,Lindex2}(j-1) <= maxcounter%in functie van Delta x (stapgrootte) zetten. (gescaald) 
-        % if counter{Lindex1,Lindex2}(j-1)>=mincounter(j-1) %Checks if these L1 and L2 are doing worse than the ones of minimal iterations
-        %     TF = 1;
-        %     break
-        % end
-        %piterations{j-1}(:,counter{Lindex1,Lindex2}(j-1)+1) = p(:,j);
-        %citerations{j-1}(:,counter{Lindex1,Lindex2}(j-1)+1) = c(:,j);
         piterations{j-1}(:,counter{Lindex1}(j-1)+1) = p(:,j);
         citerations{j-1}(:,counter{Lindex1}(j-1)+1) = c(:,j);
         cold = c(:,j);pold = p(:,j); %Updating cold and pold to the ones who will be old after this iteration
@@ -39,10 +37,14 @@ for j = 2 : nT
         %counter{Lindex1,Lindex2}(j-1) = counter{Lindex1,Lindex2}(j-1) + 1; %Adds to counter of iterations
          counter{Lindex1}(j-1) = counter{Lindex1}(j-1) + 1; %Adds to counter of iterations
 
-
+         it_err = L2norm(c(:,j)-cold,elmat,x,y,"none") + L2norm(p(:,j)-pold,elmat,x,y,"grad");
+         if counter{Lindex1}(j-1) ~= 1
+            conv_rate_temp = conv_rate_temp + it_err/it_err_old;
+         end    
     end
     % piterations{j-1}(:,counter{Lindex1,Lindex2}(j-1)+1) = p(:,j);
     % citerations{j-1}(:,counter{Lindex1,Lindex2}(j-1)+1) = c(:,j);
     piterations{j-1}(:,counter{Lindex1}(j-1)+1) = p(:,j);
     citerations{j-1}(:,counter{Lindex1}(j-1)+1) = c(:,j);
+    conv_rate(j-1) = conv_rate_temp / counter{Lindex1}(j-1);
 end

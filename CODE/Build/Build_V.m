@@ -1,6 +1,6 @@
 clear V Velem
 
-V 		= zeros(n,n); 
+V 		= sparse(n,n); 
 
 for i = 1:length(elmat(:,1)) % for all internal elements
 
